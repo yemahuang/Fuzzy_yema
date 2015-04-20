@@ -1,0 +1,8 @@
+<resources>
+
+<color name="bottom_layout_background_color">#cf4aad4a</color>
+    <color name="time_text_color">#bf3D3D3D</color>
+    <color name="a_p_m_text_color">#df3B3B3B</color>
+    <color name="line_color">#e4e1eb</color>
+
+</resources>
