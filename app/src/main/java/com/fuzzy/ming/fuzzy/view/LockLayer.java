@@ -1,5 +1,8 @@
 package com.fuzzy.ming.fuzzy.view;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -49,6 +53,7 @@ public class LockLayer extends LinearLayout {
     private RelativeLayout bottom_layout;
     private WindowManager.LayoutParams layerParams;
 
+
     private int statusBarHeight;
 
     private float xInView;
@@ -59,7 +64,13 @@ public class LockLayer extends LinearLayout {
 
     private float xInScreen;
     private float yInScreen;
+
+    private float y = 0;
+    private int ScreenWidth = 0;
+    private int ScreenHeight = 0;
     private ImageView lock_image;
+    private RelativeLayout content_layout;
+    private float y_ = 0;
 
 
     public LockLayer(Context context) {
@@ -70,13 +81,21 @@ public class LockLayer extends LinearLayout {
 
     private void init() {
         windowManager = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+
+        DisplayMetrics dm = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(dm);
+        ScreenWidth = dm.widthPixels;
+        ScreenHeight = dm.heightPixels;
+
         WEEK = context.getResources().getStringArray(R.array.week);
         calendar = Calendar.getInstance();
         getSysTime();
 
         LayoutInflater.from(context).inflate(R.layout.layout_lock, this);
-        bottom_layout = (RelativeLayout)findViewById(R.id.bottom_layout);
 
+        content_layout = (RelativeLayout) findViewById(R.id.content_layout);
+
+        bottom_layout = (RelativeLayout)findViewById(R.id.bottom_layout);
 
         lock_image = (ImageView) findViewById(R.id.lock_image);
 
@@ -88,12 +107,7 @@ public class LockLayer extends LinearLayout {
         a_p_m.setText(AM_PM);
         day.setText(mWeek);
 
-        bottom_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LockManager.removeLockLayer(context);
-            }
-        });
+
 
         applyBlur();
     }
@@ -150,24 +164,66 @@ public class LockLayer extends LinearLayout {
                 yInView = event.getY();
 
                 xDownInScreen = event.getRawX();
-                yDownInScreen = event.getRawY()-getStatusBarHeight();
+                yDownInScreen = event.getRawY();
 
                 xInScreen = event.getRawX();
-                yInScreen = event.getRawY()-getStatusBarHeight();
+                yInScreen = event.getRawY();
 
                 break;
             case MotionEvent.ACTION_MOVE:
 
                 xInScreen = event.getRawX();
-                yInScreen = event.getRawY() - getStatusBarHeight();
+                yInScreen = event.getRawY();
 
-                updateViewStatus();
-                updateViewPosition();
+                y = yInScreen - yInView;
+                y_ = yDownInScreen - yInView;
+
+                if(y_<10){
+                    content_layout.setY((int) (yInScreen - yInView));
+                }else{
+                    y=0;
+                }
+
 
                 break;
 
             case MotionEvent.ACTION_UP:
 
+                if(y < -ScreenHeight/3){
+                PropertyValuesHolder p2 = PropertyValuesHolder.ofFloat("translationY", 0-Math.abs(y), 0-ScreenHeight);
+                ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(content_layout, p2);
+                animator.setDuration(600);
+
+                animator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                            LockManager.removeLockLayer(context);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                animator.start();
+
+                }else if(y < 0){
+                    springAnim();
+
+                }else if(y > 0){
+                    springAnim();
+
+                }
 
 
                 break;
@@ -181,19 +237,50 @@ public class LockLayer extends LinearLayout {
         layerParams = params;
     }
 
-    private void updateViewStatus() {
+    private void springAnim() {
+        PropertyValuesHolder p2 = PropertyValuesHolder.ofFloat("translationY",y, -y/3);
+        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(content_layout, p2);
+        animator.setDuration(400);
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
 
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                PropertyValuesHolder p2 = PropertyValuesHolder.ofFloat("translationY", -y/3, 0);
+                ObjectAnimator.ofPropertyValuesHolder(content_layout, p2).setDuration(300).start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        animator.start();
 
     }
 
     private void updateViewPosition() {
-//        layerParams.x = (int) (xInScreen - xInView);
+        layerParams.x = (int) (xInScreen - xInView);
         layerParams.y = (int) (yInScreen - yInView);
 
-        Log.i("III","-----"+layerParams.x+"////"+layerParams.y);
-        windowManager.updateViewLayout(this, layerParams);
+        y = yInScreen - yInView;
+
+        if(y<10){
+            content_layout.setY((int) (yInScreen - yInView));
+        }else{
+            y=0;
+        }
 
     }
+
 
     /**
      * 日期变量转成对应的星期字符串
@@ -216,7 +303,7 @@ public class LockLayer extends LinearLayout {
      */
     private void getSysTime(){
 
-        Log.i("III","TTTTTTTTTTTTTT***************");
+        Log.i("III", "TTTTTTTTTTTTTT***************");
         calendar.setTimeInMillis(System.currentTimeMillis());
         mHour = calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE);
         mWeek = DateToWeek(calendar.getTime())+"  "
