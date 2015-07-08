@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.fuzzy.ming.fuzzy.activity.LockActivity;
 import com.fuzzy.ming.fuzzy.utils.LockManager;
 
 import java.util.Timer;
@@ -28,9 +29,6 @@ public class LockService extends Service {
 
     private KeyguardManager mKeyguardManager = null;
     private KeyguardManager.KeyguardLock mKeyguardLock = null;
-
-    private Handler handler = new Handler();
-    private Timer timer;
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -66,21 +64,14 @@ public class LockService extends Service {
         this.unregisterReceiver(mScreenOffReceiver);
         mKeyguardLock.reenableKeyguard();
 
-//        timer.cancel();
-//        timer = null;
         // 在此重新启动,使服务常驻内存
         startService(new Intent(this, LockService.class));
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-//        if (timer == null ) {
-//            timer = new Timer();
-//            timer.scheduleAtFixedRate(new RefreshTask(), 0, 500);
-//        }
-
-        LockManager.createLockLayer(getApplicationContext());
+        Intent lock_intent = new Intent(this, LockActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(lock_intent);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -107,20 +98,4 @@ public class LockService extends Service {
         }
     };
 
-    class RefreshTask extends TimerTask {
-
-        @Override
-        public void run() {
-
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        LockManager.createLockLayer(getApplicationContext());
-                    }
-                });
-            }
-
-
-
-    }
 }

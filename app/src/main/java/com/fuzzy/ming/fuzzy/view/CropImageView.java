@@ -82,7 +82,7 @@ public class CropImageView extends View {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        mFloatDrawable = new FloatDrawable(context);
+//        mFloatDrawable = new FloatDrawable(context);
     }
 
     public void setDrawable(Drawable mDrawable, int cropWidth, int cropHeight) {

@@ -1,6 +1,8 @@
 package com.fuzzy.ming.fuzzy.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.util.Log;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -29,10 +31,8 @@ public class LockManager {
                 layerParams.height = LayoutParams.MATCH_PARENT;
                 // 这一行实现屏蔽Home
                 layerParams.type = LayoutParams.TYPE_SYSTEM_ALERT;
-              layerParams.flags = FLAG_APKTOOL_VALUE;
-
-//                layerParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL
-//                        | LayoutParams.FLAG_NOT_FOCUSABLE;
+                layerParams.format = PixelFormat.RGBA_8888;
+                layerParams.flags = FLAG_APKTOOL_VALUE;
 
             }
             lockLayer.setParams(layerParams);
@@ -50,6 +50,9 @@ public class LockManager {
             mWindowManager = getWindowManager(context);
             mWindowManager.removeView(lockLayer);
             lockLayer = null;
+            if(context instanceof Activity){
+                ((Activity)context).finish();
+            }
         }
         isLocked = false;
     }

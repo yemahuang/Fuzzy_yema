@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import com.fuzzy.ming.fuzzy.utils.FastBlur;
 import com.fuzzy.ming.fuzzy.utils.LockManager;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -38,10 +40,6 @@ public class LockLayer extends LinearLayout {
     private WindowManager windowManager;
 
     private Calendar calendar;
-    private String mHour;
-    private String AM_PM;
-    private String mWeek;
-
     private String[] WEEK;
 
     private TextView hour;
@@ -71,6 +69,7 @@ public class LockLayer extends LinearLayout {
     private ImageView lock_image;
     private RelativeLayout content_layout;
     private float y_ = 0;
+    Handler handler = new Handler();
 
 
     public LockLayer(Context context) {
@@ -89,7 +88,6 @@ public class LockLayer extends LinearLayout {
 
         WEEK = context.getResources().getStringArray(R.array.week);
         calendar = Calendar.getInstance();
-        getSysTime();
 
         LayoutInflater.from(context).inflate(R.layout.layout_lock, this);
 
@@ -103,16 +101,19 @@ public class LockLayer extends LinearLayout {
         a_p_m = (TextView) findViewById(R.id.a_p_m);
         day = (TextView) findViewById(R.id.day);
 
-        hour.setText(mHour);
-        a_p_m.setText(AM_PM);
-        day.setText(mWeek);
-
-
+        handler.post(time_runnable);
 
         applyBlur();
     }
 
 
+    Runnable time_runnable = new Runnable() {
+        @Override
+        public void run() {
+            setTime();
+            handler.postDelayed(this,1000);
+        }
+    };
 
     private void applyBlur() {
         lock_image.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -203,6 +204,7 @@ public class LockLayer extends LinearLayout {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                             LockManager.removeLockLayer(context);
+                        handler.removeCallbacks(time_runnable);
                     }
 
                     @Override
@@ -288,6 +290,7 @@ public class LockLayer extends LinearLayout {
      * @return
      */
     public String DateToWeek(Date date) {
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int dayIndex = calendar.get(Calendar.DAY_OF_WEEK);
@@ -301,15 +304,16 @@ public class LockLayer extends LinearLayout {
     /**
      * 获取显示的时间
      */
-    private void getSysTime(){
+    private void setTime(){
 
-        Log.i("III", "TTTTTTTTTTTTTT***************");
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        mHour = calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE);
-        mWeek = DateToWeek(calendar.getTime())+"  "
-                +(calendar.get(Calendar.MONTH)+1)+"."
-                +calendar.get(Calendar.DAY_OF_MONTH);
+        long date = System.currentTimeMillis();
+        calendar.setTimeInMillis(date);
 
+        String[] time = formatDate(date).split(" ");
+        String mHour = time[1];
+        String mWeek = DateToWeek(calendar.getTime())+"  "
+                + time[0];
+        String AM_PM = "";
         int flag = calendar.get(Calendar.AM_PM);
         if (flag == Calendar.AM) {
             AM_PM = context.getResources().getString(R.string.am);
@@ -319,7 +323,21 @@ public class LockLayer extends LinearLayout {
             AM_PM = context.getResources().getString(R.string.pm);
         }
 
+        hour.setText(mHour);
+        a_p_m.setText(AM_PM);
+        day.setText(mWeek);
+
     }
+
+
+    public String formatDate(long date) {
+        SimpleDateFormat format = new SimpleDateFormat("MM.dd HH:mm");
+        String time_format =format.format(new Date(date));
+
+        return time_format;
+    }
+
+
 
 
     /**
