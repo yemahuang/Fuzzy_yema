@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Handler;
+import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,7 +50,6 @@ public class LockLayer extends LinearLayout {
     public static final int WEEKDAYS = 7;
 
     private RelativeLayout bottom_layout;
-    private WindowManager.LayoutParams layerParams;
 
 
     private int statusBarHeight;
@@ -100,6 +100,8 @@ public class LockLayer extends LinearLayout {
         hour = (TextView) findViewById(R.id.hour);
         a_p_m = (TextView) findViewById(R.id.a_p_m);
         day = (TextView) findViewById(R.id.day);
+
+
 
         handler.post(time_runnable);
 
@@ -152,6 +154,8 @@ public class LockLayer extends LinearLayout {
         overlay = FastBlur.doBlur(overlay, (int) radius, true);
         view.setBackground(new BitmapDrawable(getResources(), overlay));
 //        statusText.setText(System.currentTimeMillis() - startMs + "ms");
+
+//        Palette.from(overlay).generate().gen
     }
 
 
@@ -179,12 +183,11 @@ public class LockLayer extends LinearLayout {
                 y = yInScreen - yInView;
                 y_ = yDownInScreen - yInView;
 
-                if(y_<10){
-                    content_layout.setY((int) (yInScreen - yInView));
-                }else{
-                    y=0;
+                if(y>0){
+                   y = 0;
                 }
 
+                content_layout.setY((int) y);
 
                 break;
 
@@ -219,11 +222,11 @@ public class LockLayer extends LinearLayout {
                 });
                 animator.start();
 
-                }else if(y < 0){
+                }else if(y < 5){
                     springAnim();
 
                 }else if(y > 0){
-                    springAnim();
+//                    springAnim();
 
                 }
 
@@ -235,12 +238,9 @@ public class LockLayer extends LinearLayout {
         return true;
     }
 
-    public void setParams(WindowManager.LayoutParams params) {
-        layerParams = params;
-    }
 
     private void springAnim() {
-        PropertyValuesHolder p2 = PropertyValuesHolder.ofFloat("translationY",y, -y/3);
+        PropertyValuesHolder p2 = PropertyValuesHolder.ofFloat("translationY",y, 0);
         ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(content_layout, p2);
         animator.setDuration(400);
         animator.addListener(new Animator.AnimatorListener() {
@@ -251,8 +251,8 @@ public class LockLayer extends LinearLayout {
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                PropertyValuesHolder p2 = PropertyValuesHolder.ofFloat("translationY", -y/3, 0);
-                ObjectAnimator.ofPropertyValuesHolder(content_layout, p2).setDuration(300).start();
+//                PropertyValuesHolder p2 = PropertyValuesHolder.ofFloat("translationY", -y/3, 0);
+//                ObjectAnimator.ofPropertyValuesHolder(content_layout, p2).setDuration(300).start();
             }
 
             @Override
@@ -266,20 +266,6 @@ public class LockLayer extends LinearLayout {
             }
         });
         animator.start();
-
-    }
-
-    private void updateViewPosition() {
-        layerParams.x = (int) (xInScreen - xInView);
-        layerParams.y = (int) (yInScreen - yInView);
-
-        y = yInScreen - yInView;
-
-        if(y<10){
-            content_layout.setY((int) (yInScreen - yInView));
-        }else{
-            y=0;
-        }
 
     }
 

@@ -35,7 +35,6 @@ public class LockManager {
                 layerParams.flags = FLAG_APKTOOL_VALUE;
 
             }
-            lockLayer.setParams(layerParams);
             mWindowManager.addView(lockLayer, layerParams);
 
         }
