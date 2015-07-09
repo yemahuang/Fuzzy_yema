@@ -55,7 +55,7 @@ public class MainActivityFragment extends Fragment {
         progressBar.setVisibility(View.GONE);
 
 
-        bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.test);
+        bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.test2);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override

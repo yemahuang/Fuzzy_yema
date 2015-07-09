@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 
@@ -21,7 +22,7 @@ public class LockManager {
     private final static int FLAG_APKTOOL_VALUE = 1280;
     public static boolean isLocked = false;
 
-    public synchronized static  void createLockLayer(Context context) {
+    public synchronized static View createLockLayer(Context context) {
         mWindowManager = getWindowManager(context);
         if (lockLayer == null && !isLocked) {
             lockLayer = new LockLayer(context);
@@ -35,11 +36,13 @@ public class LockManager {
                 layerParams.flags = FLAG_APKTOOL_VALUE;
 
             }
+            lockLayer.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
             mWindowManager.addView(lockLayer, layerParams);
 
         }
         isLocked = true;
         Log.i("III",">>>>>>>>>>>>>>>>>>>>");
+        return lockLayer;
 
     }
 

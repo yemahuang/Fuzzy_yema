@@ -11,9 +11,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Handler;
-import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -196,7 +194,7 @@ public class LockLayer extends LinearLayout {
                 if(y < -ScreenHeight/3){
                 PropertyValuesHolder p2 = PropertyValuesHolder.ofFloat("translationY", 0-Math.abs(y), 0-ScreenHeight);
                 ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(content_layout, p2);
-                animator.setDuration(600);
+                animator.setDuration(500);
 
                 animator.addListener(new Animator.AnimatorListener() {
                     @Override

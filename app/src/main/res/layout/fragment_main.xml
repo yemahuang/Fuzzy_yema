@@ -21,7 +21,7 @@
         android:layout_alignParentTop="true"
         android:id="@+id/imageView"
         android:layout_centerVertical="true"
-        android:src="@drawable/test"
+        android:src="@drawable/test2"
         android:layout_above="@id/seekBar"
         android:layout_centerHorizontal="true" />
 
