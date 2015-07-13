@@ -5,12 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+
     <ImageView
         android:id="@+id/lock_image"
         android:layout_width="match_parent"
         android:src="@drawable/test1"
         android:scaleType="centerCrop"
         android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
 
     <RelativeLayout
         android:id="@+id/bottom_layout"

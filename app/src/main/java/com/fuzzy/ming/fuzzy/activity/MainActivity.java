@@ -1,6 +1,5 @@
 package com.fuzzy.ming.fuzzy.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,7 +7,7 @@ import android.view.MenuItem;
 import com.fuzzy.ming.fuzzy.R;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

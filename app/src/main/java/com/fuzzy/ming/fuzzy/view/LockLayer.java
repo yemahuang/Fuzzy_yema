@@ -68,6 +68,7 @@ public class LockLayer extends LinearLayout {
     private RelativeLayout content_layout;
     private float y_ = 0;
     Handler handler = new Handler();
+    private TextView status;
 
 
     public LockLayer(Context context) {
@@ -92,6 +93,7 @@ public class LockLayer extends LinearLayout {
         content_layout = (RelativeLayout) findViewById(R.id.content_layout);
 
         bottom_layout = (RelativeLayout)findViewById(R.id.bottom_layout);
+        status = (TextView)findViewById(R.id.status);
 
         lock_image = (ImageView) findViewById(R.id.lock_image);
 
@@ -124,6 +126,7 @@ public class LockLayer extends LinearLayout {
 
                 Bitmap bmp = lock_image.getDrawingCache();
                 blur(bmp, bottom_layout);
+                blur(bmp, status);
                 return true;
             }
         });
