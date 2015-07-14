@@ -12,6 +12,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		hideNavigationBar(getWindow().getDecorView());
 		setContentView(R.layout.activity_main);
 
 	}

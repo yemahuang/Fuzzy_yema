@@ -16,4 +16,8 @@
         <item>周六</item>
 
     </string-array>
+
+    <string name="label_author_tip">选取摄影师作品作为壁纸</string>
+    <string name="label_other_tip">其他壁纸</string>
+    <string name="label_select_from_gallery">从相册中选取</string>
 </resources>
