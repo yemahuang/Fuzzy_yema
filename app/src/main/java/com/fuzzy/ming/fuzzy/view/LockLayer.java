@@ -17,6 +17,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -198,7 +203,7 @@ public class LockLayer extends LinearLayout {
                 PropertyValuesHolder p2 = PropertyValuesHolder.ofFloat("translationY", 0-Math.abs(y), 0-ScreenHeight);
                 ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(content_layout, p2);
                 animator.setDuration(500);
-
+                    animator.setInterpolator(new AccelerateInterpolator());
                 animator.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
@@ -207,7 +212,7 @@ public class LockLayer extends LinearLayout {
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                            LockManager.removeLockLayer(context);
+                        LockManager.removeLockLayer(context);
                         handler.removeCallbacks(time_runnable);
                     }
 
@@ -244,6 +249,7 @@ public class LockLayer extends LinearLayout {
         PropertyValuesHolder p2 = PropertyValuesHolder.ofFloat("translationY",y, 0);
         ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(content_layout, p2);
         animator.setDuration(400);
+//        animator.setInterpolator(new BounceInterpolator());
         animator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {

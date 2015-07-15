@@ -56,7 +56,7 @@ public class PhotoGridAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_photo_grid, null);
             holder.image = (ImageView) convertView.findViewById(R.id.image);
 
-            holder.image.setLayoutParams(new AbsListView.LayoutParams(width/5,width/5));
+//            holder.image.setLayoutParams(new AbsListView.LayoutParams(width/5,width/5));
 
             convertView.setTag(holder);
         }else
