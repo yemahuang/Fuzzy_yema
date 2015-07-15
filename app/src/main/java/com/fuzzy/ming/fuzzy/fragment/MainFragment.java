@@ -24,6 +24,7 @@ public class MainFragment extends Fragment {
 
     int[] photo_id = new int[]{
             R.mipmap.y1,
+            R.mipmap.y4,
             R.mipmap.y11,
             R.mipmap.y13,
             R.mipmap.y15,
@@ -52,6 +53,7 @@ public class MainFragment extends Fragment {
     private void initView(View view){
         photo_grid_view = (GridView)view.findViewById(R.id.photo_grid_view);
         select_from_gallery = (TextView) view.findViewById(R.id.select_from_gallery);
+
         photo_grid_view.setAdapter(new PhotoGridAdapter(getActivity(), photo_id));
 
     }

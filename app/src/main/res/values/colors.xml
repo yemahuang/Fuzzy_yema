@@ -5,6 +5,12 @@
     <color name="a_p_m_text_color">#df3B3B3B</color>
     <color name="line_color">#e4e1eb</color>
 
-    <color name="label_color_gray">#b1b1b1</color>
+    <color name="label_color_gray">#696969</color>
+    <color name="default_background_color">#cbcbbb</color>
+    <color name="background_color">#cbbbbb</color>
+
+    <color name="label_color_gray_light">#ababab</color>
+    <color name="gallery_color_select">#80ababab</color>
+    <color name="gallery_color_normal">#80f2f2f2</color>
 
 </resources>

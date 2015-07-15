@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.fuzzy.ming.fuzzy.R;
+import com.fuzzy.ming.fuzzy.utils.DensityUtil;
 
 /**
  * Created by Ming on 15-7-14.
@@ -55,9 +56,8 @@ public class PhotoGridAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_photo_grid, null);
             holder.image = (ImageView) convertView.findViewById(R.id.image);
-
-//            holder.image.setLayoutParams(new AbsListView.LayoutParams(width/5,width/5));
-
+            int w = (width - DensityUtil.dp2px(context,3*4+32))/4;
+            holder.image.setLayoutParams(new AbsListView.LayoutParams(w,w));
             convertView.setTag(holder);
         }else
         {
