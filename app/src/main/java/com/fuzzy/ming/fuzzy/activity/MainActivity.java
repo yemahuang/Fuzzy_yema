@@ -1,10 +1,12 @@
 package com.fuzzy.ming.fuzzy.activity;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.fuzzy.ming.fuzzy.R;
+import com.fuzzy.ming.fuzzy.fragment.MainFragment;
 
 
 public class MainActivity extends BaseActivity {
@@ -14,6 +16,9 @@ public class MainActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		hideNavigationBar(getWindow().getDecorView());
 		setContentView(R.layout.activity_main);
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		ft.add(R.id.fragment, new MainFragment());
+		ft.commit();
 
 	}
 
@@ -38,5 +43,15 @@ public class MainActivity extends BaseActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onBackPressed() {
+
+		if(getFragmentManager().getBackStackEntryCount() == 0){
+			super.onBackPressed();
+		}else{
+			getFragmentManager().popBackStack();
+		}
 	}
 }
