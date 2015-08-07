@@ -101,7 +101,9 @@ public class LockLayer extends LinearLayout {
         status = (TextView)findViewById(R.id.status);
 
         lock_image = (ImageView) findViewById(R.id.lock_image);
-
+        if (LockManager.bitmap != null) {
+            lock_image.setImageBitmap(LockManager.bitmap);
+        }
         hour = (TextView) findViewById(R.id.hour);
         a_p_m = (TextView) findViewById(R.id.a_p_m);
         day = (TextView) findViewById(R.id.day);

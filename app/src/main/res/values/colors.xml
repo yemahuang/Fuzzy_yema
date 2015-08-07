@@ -8,9 +8,17 @@
     <color name="label_color_gray">#696969</color>
     <color name="default_background_color">#cbcbbb</color>
     <color name="background_color">#cbbbbb</color>
+    <color name="background_color_1">#9dacd3</color>
+    <color name="background_color_2">#928ea9</color>
+    <color name="background_color_3">#7b80b7</color>
+    <color name="background_color_4">#dfdfdd</color>
+    <color name="background_color_5">#613b24</color>
 
     <color name="label_color_gray_light">#ababab</color>
     <color name="gallery_color_select">#80ababab</color>
     <color name="gallery_color_normal">#80f2f2f2</color>
+
+    <color name="select_ok_color">#3472af</color>
+    <color name="green">#98ce80</color>
 
 </resources>

@@ -2,6 +2,7 @@ package com.fuzzy.ming.fuzzy.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +22,7 @@ public class LockManager {
     // 这个值具体用于实现全屏
     private final static int FLAG_APKTOOL_VALUE = 1280;
     public static boolean isLocked = false;
+    public static Bitmap bitmap = null;
 
     public synchronized static View createLockLayer(Context context) {
         mWindowManager = getWindowManager(context);

@@ -1,17 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:id="@+id/crop_layout"
+    android:background="@color/background_color_2"
     android:layout_height="match_parent">
 
-    <com.fuzzy.ming.fuzzy.view.CropImageView
-        android:id="@+id/cropImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <com.fuzzy.ming.fuzzy.view.TouchImageView
+        android:id="@+id/src_pic"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:id="@+id/bottom_layout"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:background="@android:color/white"
+        android:layout_height="wrap_content">
+        <com.gc.materialdesign.views.ButtonFlat
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:text="cancel"
+            android:background="@color/default_background_color"
+            android:layout_height="wrap_content" />
+        <com.gc.materialdesign.views.ButtonFlat
+            android:id="@+id/ok"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:text="ok"
+            android:background="@color/background_color_2"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 </RelativeLayout>
