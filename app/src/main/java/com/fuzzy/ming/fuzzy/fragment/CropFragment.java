@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,8 +64,6 @@ public class CropFragment extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Intent intent = getArguments().getParcelable("intent");
-
 
         DisplayMetrics outMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
@@ -75,9 +74,18 @@ public class CropFragment extends Fragment implements
         bottom_layout = (LinearLayout) getView().findViewById(R.id.bottom_layout);
         srcPic = (TouchImageView) getView().findViewById(R.id.src_pic);
         srcPic.setDrawingCacheEnabled(true);
-        srcPic.setImageURI(intent.getData());
-        String[] uri = intent.getData().toString().split("/");
-        file_name = uri[uri.length-1];
+
+        if(getArguments().getInt("flag") == 0){
+            Intent intent = getArguments().getParcelable("intent");
+            srcPic.setImageURI(intent.getData());
+            String[] uri = intent.getData().toString().split("/");
+            file_name = uri[uri.length-1];
+        }else{
+            int photo_id =  getArguments().getInt("photo_id");
+            srcPic.setImageResource(photo_id);
+            file_name = photo_id+"";
+        }
+
         ViewTreeObserver observer = srcPic.getViewTreeObserver();
         observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
@@ -145,6 +153,9 @@ public class CropFragment extends Fragment implements
         crop_layout.addView(clipview, new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
+        Palette palette = Palette.from(bitmap).generate();
+        crop_layout.setBackgroundColor(palette.getDarkMutedColor(R.color.background_color_2));
+
     }
 
     public void onClick(View v) {
@@ -195,9 +206,9 @@ public class CropFragment extends Fragment implements
         int statusBarHeight = frame.top;
 
         Bitmap finalBitmap = Bitmap.createBitmap(view.getDrawingCache(),
-                clipview.getClipLeftMargin(), clipview.getClipTopMargin()+statusBarHeight
+                clipview.getClipLeftMargin(), clipview.getClipTopMargin()
                 , clipview.getClipWidth(),
-                clipview.getClipHeight()-clipview.getCustomBottomHeight());
+                clipview.getClipHeight());
 
         // 释放资源
         view.destroyDrawingCache();

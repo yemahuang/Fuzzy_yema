@@ -7,21 +7,29 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.fuzzy.ming.fuzzy.R;
 import com.fuzzy.ming.fuzzy.controller.PhotoGridAdapter;
+
+import org.w3c.dom.Text;
+
+import java.util.Random;
 
 /**
  * Created by Ming on 15-7-14.
@@ -30,6 +38,9 @@ public class MainFragment extends Fragment {
     private GridView photo_grid_view;
     private TextView select_from_gallery;
     private static final int SELECT_GALLERY = 0;
+    private ScrollView main;
+    private TextView label_other;
+    private TextView label_author;
 
     public MainFragment(){
 
@@ -66,8 +77,27 @@ public class MainFragment extends Fragment {
     private void initView(View view){
         photo_grid_view = (GridView)view.findViewById(R.id.photo_grid_view);
         select_from_gallery = (TextView) view.findViewById(R.id.select_from_gallery);
+        main = (ScrollView) view.findViewById(R.id.main);
+        label_other = (TextView) view.findViewById(R.id.label_other);
+        label_author = (TextView) view.findViewById(R.id.label_author);
 
         photo_grid_view.setAdapter(new PhotoGridAdapter(getActivity(), photo_id));
+
+        photo_grid_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                CropFragment cropFragment = new CropFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("flag",1);
+                bundle.putInt("photo_id", photo_id[position]);
+                cropFragment.setArguments(bundle);
+                ft.replace(R.id.fragment, cropFragment);
+                ft.addToBackStack("CropFragment");
+                ft.isAddToBackStackAllowed();
+                ft.commit();
+            }
+        });
 
         select_from_gallery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +105,17 @@ public class MainFragment extends Fragment {
                 selectGallery();
             }
         });
+
+        Palette palette = Palette.from(BitmapFactory.decodeResource(getResources(), photo_id[new Random().nextInt(16)])).generate();
+
+        main.setBackgroundColor(palette.getDarkMutedColor(R.color.background_color_2));
+
+        select_from_gallery.setBackgroundColor(palette.getDarkMutedSwatch().getBodyTextColor());
+        select_from_gallery.setTextColor(palette.getDarkMutedColor(R.color.background_color_2));
+
+        int tip_color = palette.getDarkMutedSwatch().getTitleTextColor();
+        label_author.setTextColor(tip_color);
+        label_other.setTextColor(tip_color);
 
     }
 
@@ -87,10 +128,11 @@ public class MainFragment extends Fragment {
         switch (requestCode) {
             case SELECT_GALLERY:
 //                selectImage(getActivity(),data);
-                Log.i("Yema","yyy"+getPath(getActivity(),data.getData()));
+//                Log.i("Yema","yyy"+getPath(getActivity(),data.getData()));
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 CropFragment cropFragment = new CropFragment();
                 Bundle bundle = new Bundle();
+                bundle.putInt("flag",0);
                 bundle.putParcelable("intent",data);
                 cropFragment.setArguments(bundle);
                 ft.replace(R.id.fragment, cropFragment);

@@ -68,7 +68,7 @@ public class ClipView extends View {
             clipTopMargin = (height - clipHeight) / 2;
         }
         // 画阴影
-        paint.setAlpha(200);
+        paint.setAlpha(130);
         // top
         canvas.drawRect(0, customTopBarHeight, width, clipTopMargin, paint);
         // left

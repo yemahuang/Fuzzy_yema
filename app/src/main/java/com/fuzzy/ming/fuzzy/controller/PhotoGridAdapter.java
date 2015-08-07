@@ -52,15 +52,13 @@ public class PhotoGridAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_photo_grid, null);
             holder.image = (ImageView) convertView.findViewById(R.id.image);
             int w = (width - Density.dp2px(context, 3 * 4 + 32))/4;
             holder.image.setLayoutParams(new AbsListView.LayoutParams(w,w));
             convertView.setTag(holder);
-        }else
-        {
+        }else {
             holder = (ViewHolder) convertView.getTag();
         }
 

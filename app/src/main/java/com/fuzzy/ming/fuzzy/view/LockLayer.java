@@ -6,11 +6,13 @@ import android.animation.PropertyValuesHolder;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Handler;
+import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -108,7 +110,29 @@ public class LockLayer extends LinearLayout {
         a_p_m = (TextView) findViewById(R.id.a_p_m);
         day = (TextView) findViewById(R.id.day);
 
-
+//        Palette.generateAsync(LockManager.bitmap,
+//                new Palette.PaletteAsyncListener() {
+//                    @Override
+//                    public void onGenerated(Palette palette) {
+//                        Palette.Swatch vibrant =
+//                                palette.getVibrantSwatch();
+//                        // If we have a vibrant color
+//                        // update the title TextView
+//                        hour.setBackgroundColor(
+//                                vibrant.getRgb());
+//                        hour.setTextColor(
+//                                vibrant.getTitleTextColor());
+//                    }
+//                });
+        if(LockManager.bitmap == null) {
+            LockManager.bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test1);
+        }
+        if(LockManager.bitmap != null){
+            Palette palette = Palette.from(LockManager.bitmap).generate();
+            hour.setTextColor(palette.getLightVibrantColor(R.color.background_color_2));
+            day.setTextColor(palette.getDarkMutedColor(R.color.background_color_2));
+            a_p_m.setTextColor(palette.getVibrantColor(R.color.background_color));
+        }
 
         handler.post(time_runnable);
 
@@ -161,9 +185,7 @@ public class LockLayer extends LinearLayout {
 
         overlay = FastBlur.doBlur(overlay, (int) radius, true);
         view.setBackground(new BitmapDrawable(getResources(), overlay));
-//        statusText.setText(System.currentTimeMillis() - startMs + "ms");
 
-//        Palette.from(overlay).generate().gen
     }
 
 
